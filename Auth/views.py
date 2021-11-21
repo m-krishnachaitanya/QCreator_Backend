@@ -18,12 +18,12 @@ def register(request):
         return HttpResponse(login_serializer.data, status=status.HTTP_201_CREATED)
     return HttpResponse(login_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def verify(request):
     login_data = JSONParser().parse(request)
     username = login_data.get('username')
     password = login_data.get('password')
     user = Login.objects.all().filter(username = username, password = password)
-    if user == None:
+    if len(user) == 0:
         return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return HttpResponse(status=status.HTTP_200_OK)
